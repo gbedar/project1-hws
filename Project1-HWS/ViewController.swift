@@ -20,20 +20,20 @@ class ViewController: UITableViewController
     let fm = FileManager.default
     let path = Bundle.main.resourcePath!
     let items = try! fm.contentsOfDirectory(atPath: path)
-    
-    print("all files are  \(items)")
-    
     for item in items
     {
       if item.hasSuffix("jpg")
       {
         pictures.append(item)
-        
       }
       
     }
-    print("Pictures is: \(pictures)")
-
+    //print("Pictures unsorted is: \(pictures)")
+    
+    pictures.sort()
+    
+    //print("Pictures sorted is: \(pictures)")
+    //print("the number of pictures is: \(pictures.count)")
   }
   
   override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -43,15 +43,16 @@ class ViewController: UITableViewController
   override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "Picture", for: indexPath)
     cell.textLabel?.text = pictures[indexPath.row]
-    print("the indexPath is: \(indexPath.description)")
     return cell
   }
   
   override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    //1: try loading the "Detail" view controller and typecsting it to be DetailViewController.
+    //1: try loading the "Detail" view controller and typecasting it to be DetailViewController.
     if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
       //2: success! Set its selectedImage property.
       vc.selectedImage = pictures[indexPath.row]
+      vc.countOfImages = pictures.count
+      vc.indexOfImages = indexPath.row + 1
       //3: now push it onto the navigation controller.
       navigationController?.pushViewController(vc, animated: true)
       }
